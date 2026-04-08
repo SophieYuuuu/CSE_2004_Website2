@@ -1,0 +1,353 @@
+:root {
+  --bg: #000000;
+  --card: #111218;
+  --card-strong: #1b1c24;
+  --text: #f5f7ff;
+  --muted: rgba(245, 247, 255, 0.7);
+  --accent: #ffb000;
+  --accent-2: #3b82f6;
+  --success: #22c55e;
+  --danger: #ef4444;
+  --border: #2a2d3a;
+  --shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  --font-title: "Oxanium", sans-serif;
+  --font-body: "IBM Plex Sans", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-body);
+  color: var(--text);
+  background: var(--bg);
+  font-weight: 400;
+}
+
+.page {
+  padding: 18px 5vw 28px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.hero {
+  display: grid;
+  gap: 18px;
+  align-items: start;
+  margin-bottom: 18px;
+}
+
+.hero--stacked {
+  grid-template-columns: 1fr;
+}
+
+.hero__title {
+  font-family: var(--font-title);
+  font-size: clamp(1.35rem, 2.8vw, 2.2rem);
+  margin: 0;
+  letter-spacing: 1px;
+  line-height: 1.4;
+  text-align: center;
+  font-weight: 700;
+}
+
+.lead {
+  font-size: 0.95rem;
+  color: var(--muted);
+  max-width: 520px;
+  font-weight: 400;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border: 2px solid var(--border);
+  text-transform: uppercase;
+  font-family: var(--font-title);
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  background: var(--card);
+  font-weight: 700;
+}
+
+.badge--tiny {
+  font-size: 0.5rem;
+  padding: 3px 6px;
+  width: fit-content;
+  justify-self: start;
+}
+.hero__actions {
+  display: flex;
+  gap: 12px;
+  margin: 12px 0;
+  flex-wrap: wrap;
+}
+
+.city-form {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.city-form--hero {
+  align-items: stretch;
+  margin: 4px 0 6px;
+  width: 100%;
+}
+
+.city-form input {
+  border: 2px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  padding: 14px 16px;
+  font-family: var(--font-title);
+  font-size: 1.05rem;
+  letter-spacing: 1px;
+  flex: 1 1 520px;
+  min-width: min(720px, 100%);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
+}
+
+.city-form input::placeholder {
+  color: rgba(245, 247, 255, 0.6);
+  font-size: 0.95rem;
+}
+
+.city-form button {
+  flex: 1 1 200px;
+  font-size: 0.9rem;
+  padding: 12px 16px;
+  font-weight: 800;
+}
+
+button {
+  border: 2px solid var(--border);
+  font-family: var(--font-title);
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  padding: 8px 12px;
+  background: var(--card);
+  color: var(--text);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  font-weight: 700;
+}
+
+button:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+}
+
+.primary {
+  background: var(--accent);
+  color: #10131a;
+  border-color: #d97706;
+}
+
+.ghost {
+  background: var(--card);
+}
+
+.meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.meta--full {
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  width: 100%;
+}
+
+.meta__label {
+  display: block;
+  color: var(--muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+  font-family: var(--font-title);
+  font-weight: 600;
+}
+
+.meta span:not(.meta__label) {
+  font-weight: 300;
+}
+
+.narrative-row {
+  background: var(--card);
+  border: 2px solid var(--border);
+  padding: 12px 14px;
+  display: grid;
+  gap: 6px;
+}
+
+.panel__title {
+  margin: 0 0 6px;
+  font-family: var(--font-title);
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+  font-weight: 700;
+}
+
+.panel__text {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.4;
+  font-weight: 400;
+  font-size: 0.9rem;
+}
+
+.panel__chip {
+  padding: 6px 10px;
+  background: var(--card-strong);
+  border: 2px solid var(--border);
+  font-family: var(--font-title);
+  font-size: 0.55rem;
+  align-self: flex-start;
+  font-weight: 700;
+}
+
+.panel__divider {
+  height: 2px;
+  width: 100%;
+  background: var(--border);
+}
+
+.content {
+  display: grid;
+  gap: 28px;
+}
+
+.game {
+  background: var(--card);
+  padding: 16px;
+  border: 2px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.game__header {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.game__header h2 {
+  margin: 0 0 8px;
+  font-family: var(--font-title);
+  font-size: 1rem;
+  letter-spacing: 1px;
+  font-weight: 700;
+}
+
+.game__stats {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.game__board {
+  display: grid;
+  grid-template-columns: minmax(240px, 480px) minmax(220px, 280px);
+  gap: 16px;
+  align-items: start;
+  justify-content: center;
+}
+
+#mazeCanvas {
+  width: min(74vw, 480px);
+  height: min(74vw, 480px);
+  background: #0a0b0f;
+  border: 3px solid var(--border);
+  image-rendering: pixelated;
+}
+
+.side-column {
+  display: grid;
+  gap: 12px;
+}
+
+.side-block {
+  background: var(--card);
+  border: 2px solid var(--border);
+  padding: 12px;
+  display: grid;
+  gap: 10px;
+}
+
+.timer-block {
+  background: #0a0b0f;
+  text-align: center;
+}
+
+.timer-block #timerText {
+  font-family: var(--font-title);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.game__controls {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.game__tip {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+.conclusion {
+  margin-top: 12px;
+  background: var(--card);
+  border: 2px solid var(--border);
+  padding: 12px 14px;
+  display: grid;
+  gap: 6px;
+}
+
+.footer {
+  margin-top: 28px;
+  text-align: center;
+  color: var(--muted);
+  font-family: var(--font-title);
+  font-size: 0.6rem;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .game__board {
+    grid-template-columns: 1fr;
+  }
+}
+
+.fade-in {
+  animation: fade 0.5s steps(4, end) both;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

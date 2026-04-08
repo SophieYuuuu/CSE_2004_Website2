@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GeoMood Arcade</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600;700&family=Oxanium:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="hero hero--stacked">
+        <p class="badge badge--tiny">GeoMood Arcade</p>
+        <h1 class="hero__title">
+          Where Do You Want to<br />Play Today's Maze?
+        </h1>
+        <div class="city-form city-form--hero">
+          <input
+            id="cityInput"
+            type="text"
+            placeholder="Enter a city or state (e.g., Seattle, WA)"
+            autocomplete="off"
+          />
+          <button id="cityBtn" class="primary">Play Maze</button>
+          <button id="randomBtn" class="ghost">Randomly Generate</button>
+        </div>
+        <div class="meta meta--full">
+          <div>
+            <span class="meta__label">Location</span>
+            <span id="locationLabel">Waiting for location...</span>
+          </div>
+          <div>
+            <span class="meta__label">Weather</span>
+            <span id="weatherLabel">Waiting for data...</span>
+          </div>
+          <div>
+            <span class="meta__label">Theme</span>
+            <span id="themeLabel">Calculating...</span>
+          </div>
+          <div>
+            <span class="meta__label">Difficulty</span>
+            <span id="difficultyChip">-</span>
+          </div>
+        </div>
+        <div class="narrative-row">
+          <p class="panel__title">Daily Narrative</p>
+          <p id="introText" class="panel__text">Generating...</p>
+        </div>
+      </header>
+
+      <main class="content">
+        <section class="game">
+          <div class="game__header">
+            <div>
+              <h2>Daily Maze</h2>
+              <p>Generated from a date seed and the selected city's weather.</p>
+            </div>
+            <div class="game__stats">
+              <div>
+                <span class="meta__label">Difficulty</span>
+                <span id="difficultyLabel">-</span>
+              </div>
+              <div>
+                <span class="meta__label">Size</span>
+                <span id="mazeSizeLabel">-</span>
+              </div>
+              <div>
+                <span class="meta__label">Mood</span>
+                <span id="moodLabel">-</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="game__board">
+            <canvas id="mazeCanvas" width="640" height="640"></canvas>
+            <aside class="side-column">
+              <div class="side-block timer-block">
+                <p class="panel__title">Timer</p>
+                <p id="timerText" class="panel__text">0s</p>
+              </div>
+              <div class="side-block">
+                <p class="panel__title">Encouragement</p>
+                <p id="encouragementText" class="panel__text">Loading a boost...</p>
+              </div>
+              <div class="side-block">
+                <div class="game__controls">
+                  <button id="solveBtn" class="ghost">Show Path</button>
+                  <button id="resetBtn" class="ghost">Reset Maze</button>
+                  <button id="downloadBtn" class="ghost">Download Maze</button>
+                </div>
+                <p class="game__tip">Use arrow keys or WASD to move.</p>
+              </div>
+            </aside>
+          </div>
+          <div class="conclusion">
+            <p class="panel__title">Conclusion</p>
+            <p id="feedbackText" class="panel__text">Complete the maze to unlock.</p>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <p>GeoMood Arcade · Turning real-world signals into play</p>
+      </footer>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
