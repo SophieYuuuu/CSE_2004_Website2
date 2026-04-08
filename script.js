@@ -6,6 +6,7 @@ const ui = {
   cityBtn: document.getElementById("cityBtn"),
   randomBtn: document.getElementById("randomBtn"),
   locationBtn: document.getElementById("locationBtn"),
+  locationStatus: document.getElementById("locationStatus"),
   locationLabel: document.getElementById("locationLabel"),
   weatherLabel: document.getElementById("weatherLabel"),
   themeLabel: document.getElementById("themeLabel"),
@@ -42,6 +43,11 @@ const state = {
 function updateTimerDisplay(seconds) {
   if (!ui.timerText) return;
   ui.timerText.textContent = `Timer: ${seconds}s`;
+}
+
+function updateLocationStatus(message) {
+  if (!ui.locationStatus) return;
+  ui.locationStatus.textContent = message;
 }
 
 async function getRandomUSCity() {
@@ -981,7 +987,9 @@ ui.randomBtn.addEventListener("click", () => {
     });
 });
 ui.locationBtn.addEventListener("click", () => {
+  updateLocationStatus("Detecting location...");
   if (!navigator.geolocation) {
+    updateLocationStatus("Geolocation not supported. Use a city name instead.");
     return;
   }
 
@@ -992,19 +1000,27 @@ ui.locationBtn.addEventListener("click", () => {
         if (ui.cityInput) {
           ui.cityInput.value = cityName;
         }
-        ui.encouragementText.textContent = "Location detected. You can play when ready.";
+        updateLocationStatus("Location detected. You can play when ready.");
       } catch (error) {
         if (ui.cityInput) {
           ui.cityInput.value = "";
         }
-        ui.encouragementText.textContent = "Location not found. Please try again.";
+        updateLocationStatus("Location not found. Please try again.");
       }
     },
-    () => {
+    (error) => {
       if (ui.cityInput) {
         ui.cityInput.value = "";
       }
-      ui.encouragementText.textContent = "Location not found. Please try again.";
+      if (error && error.code === 1) {
+        updateLocationStatus("Location permission denied. Use a city name instead.");
+      } else if (error && error.code === 2) {
+        updateLocationStatus("Location unavailable. Please try again.");
+      } else if (error && error.code === 3) {
+        updateLocationStatus("Location request timed out. Please try again.");
+      } else {
+        updateLocationStatus("Location not found. Please try again.");
+      }
     },
     { enableHighAccuracy: true, timeout: 8000 }
   );
@@ -1041,3 +1057,4 @@ ui.introText.textContent = "Pick a city to generate today's maze.";
 ui.encouragementText.textContent = "Your encouragement will appear here.";
 ui.feedbackText.textContent = "Complete the maze to unlock feedback.";
 updateTimerDisplay(0);
+updateLocationStatus("");
