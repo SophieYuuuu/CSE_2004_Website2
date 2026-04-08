@@ -20,14 +20,19 @@
           Where Do You Want to<br />Play Today's Maze?
         </h1>
         <div class="city-form city-form--hero">
-          <input
-            id="cityInput"
-            type="text"
-            placeholder="Enter a city or state (e.g., Seattle, WA)"
-            autocomplete="off"
-          />
-          <button id="cityBtn" class="primary">Play Maze</button>
-          <button id="randomBtn" class="ghost">Randomly Generate</button>
+          <div class="city-row city-row--main">
+            <input
+              id="cityInput"
+              type="text"
+              placeholder="Enter a city or state (e.g., Seattle, WA)"
+              autocomplete="off"
+            />
+          </div>
+          <div class="city-row city-row--sub">
+            <button id="locationBtn" class="ghost">Use My Location</button>
+            <button id="randomBtn" class="ghost">Randomly Generate</button>
+          </div>
+          <button id="cityBtn" class="primary city-btn">Play Maze</button>
         </div>
         <div class="meta meta--full">
           <div>

@@ -5,6 +5,7 @@ const ui = {
   cityInput: document.getElementById("cityInput"),
   cityBtn: document.getElementById("cityBtn"),
   randomBtn: document.getElementById("randomBtn"),
+  locationBtn: document.getElementById("locationBtn"),
   locationLabel: document.getElementById("locationLabel"),
   weatherLabel: document.getElementById("weatherLabel"),
   themeLabel: document.getElementById("themeLabel"),
@@ -598,6 +599,20 @@ async function getWeatherByCoords(lat, lon) {
   return weather;
 }
 
+async function reverseGeocode(lat, lon) {
+  const response = await fetch(
+    `https://cse2004.com/api/geocode?latlng=${lat},${lon}`
+  );
+  if (!response.ok) {
+    throw new Error("Reverse geocode failed");
+  }
+  const data = await response.json();
+  if (!data.results || data.results.length === 0) {
+    throw new Error("No reverse geocode results");
+  }
+  return formatCityState(data.results[0].address_components) || "Your city";
+}
+
 async function getLocation() {
   return new Promise((resolve) => {
     if (!navigator.geolocation) {
@@ -842,6 +857,90 @@ async function buildGameWithCity(city) {
   }
 }
 
+async function buildGameWithCoords(lat, lon) {
+  ui.introText.textContent = "Reading location and weather...";
+  ui.encouragementText.textContent = "Calculating maze parameters...";
+  ui.feedbackText.textContent = "Complete the maze to unlock feedback.";
+  updateTimerDisplay(0);
+
+  let weatherRaw;
+  let cityName = "Your city";
+  try {
+    [weatherRaw, cityName] = await Promise.all([
+      getWeatherByCoords(lat, lon),
+      reverseGeocode(lat, lon),
+    ]);
+  } catch (error) {
+    weatherRaw = await getWeatherByCoords(lat, lon);
+  }
+
+  state.location = { city: cityName, lat, lon };
+  if (ui.cityInput) {
+    ui.cityInput.value = cityName;
+  }
+  state.weather = normalizeWeatherPayload(weatherRaw);
+
+  if (!state.weather) {
+    ui.locationLabel.textContent = "Location unavailable";
+    ui.weatherLabel.textContent = "Weather not found";
+    ui.themeLabel.textContent = "-";
+    ui.introText.textContent = "Weather data unavailable for this location.";
+    ui.encouragementText.textContent = "Try a city name instead.";
+    ui.feedbackText.textContent = "No data loaded.";
+    ctx.clearRect(0, 0, ui.canvas.width, ui.canvas.height);
+    state.maze = null;
+    state.solvedPath = null;
+    return;
+  }
+
+  state.mood = resolveMoodByTemp(state.weather.temperature);
+  state.size = state.mood.size;
+
+  const seedString = `${dateSeed()}-${state.location.lat.toFixed(2)}-${state.location.lon.toFixed(2)}-${String(
+    state.weather.code
+  )}`;
+  const seed = Array.from(seedString).reduce((acc, char) => acc + char.charCodeAt(0), 0);
+
+  state.maze = createMaze(state.size, seed);
+  state.player = { x: 0, y: 0 };
+  state.solvedPath = null;
+  state.timerStart = null;
+  state.elapsedSeconds = 0;
+  state.timerRunning = false;
+  if (state.timerInterval) {
+    clearInterval(state.timerInterval);
+    state.timerInterval = null;
+  }
+  updateTimerDisplay(0);
+
+  updateUI();
+  setCanvasSize();
+
+  try {
+    const aiText = await generateAiNarrative(
+      state.location.city,
+      state.weather.text,
+      state.weather.temperature
+    );
+    if (aiText) {
+      ui.introText.textContent = aiText;
+    } else {
+      ui.introText.textContent = "AI response empty.";
+    }
+
+    const encouragement = await generateAiEncouragement(state.location.city);
+    if (encouragement) {
+      ui.encouragementText.textContent = encouragement;
+    } else {
+      ui.encouragementText.textContent = "AI response empty.";
+    }
+  } catch (error) {
+    console.error("AI request failed:", error);
+    ui.introText.textContent = "AI request failed.";
+    ui.encouragementText.textContent = "AI request failed.";
+  }
+}
+
 function downloadMaze() {
   const link = document.createElement("a");
   link.download = `GeoMood-${dateSeed()}.png`;
@@ -880,6 +979,35 @@ ui.randomBtn.addEventListener("click", () => {
     .catch(() => {
       ui.cityInput.value = "";
     });
+});
+ui.locationBtn.addEventListener("click", () => {
+  if (!navigator.geolocation) {
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    async (pos) => {
+      try {
+        const cityName = await reverseGeocode(pos.coords.latitude, pos.coords.longitude);
+        if (ui.cityInput) {
+          ui.cityInput.value = cityName;
+        }
+        ui.encouragementText.textContent = "Location detected. You can play when ready.";
+      } catch (error) {
+        if (ui.cityInput) {
+          ui.cityInput.value = "";
+        }
+        ui.encouragementText.textContent = "Location not found. Please try again.";
+      }
+    },
+    () => {
+      if (ui.cityInput) {
+        ui.cityInput.value = "";
+      }
+      ui.encouragementText.textContent = "Location not found. Please try again.";
+    },
+    { enableHighAccuracy: true, timeout: 8000 }
+  );
 });
 ui.cityInput.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
